@@ -1,0 +1,36 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "cybersafeapp-project",
+          "appId": "1:757210727625:android:cd2d63f4a6947dd8b53918",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "cybersafeapp-project",
+          "configurations": {
+            "android": "1:757210727625:android:cd2d63f4a6947dd8b53918",
+            "web": "1:757210727625:web:3e8ea00a6b09c4feb53918"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
