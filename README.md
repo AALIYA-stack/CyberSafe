@@ -392,9 +392,7 @@ The application is designed to discourage users from sharing:
 
 The CyberSafe web version is deployed using Firebase Hosting.
 
-**Live Web Application:**
 
-https://cybersafeapp-project.web.app
 
 ---
 
