@@ -152,12 +152,12 @@ static const String complaintDetails = '/complaint-details';
 // ==========================================================
 
   static const String adminLogin = '/admin-login';
-  static const String adminDashboard = '/admin-dashboard';
-static const String adminComplaints = '/admin-complaints';
-  static const String adminShell = '/admin-shell';
-  static const String adminReports = '/admin-reports';
+  static const String adminComplaints = '/admin-complaints';
+   static const String adminReports = '/admin-reports';
 static const String adminComplaintDetails =
 '/admin-complaint-details';
+  static const String adminDashboard = '/admin-dashboard';
+  static const String adminShell = '/admin-shell';
 
 static const String adminNotifications =
 '/admin-notifications';
@@ -373,7 +373,7 @@ final argument = routeSettings.arguments;
 
 if (argument is Complaint) {
 return MaterialPageRoute(
-builder: (_) => ComplaintDetailsScreen(
+builder: (_) => ComplaintDetailScreen(
 complaint: argument,
 ),
 settings: routeSettings,

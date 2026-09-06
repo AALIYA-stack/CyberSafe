@@ -73,7 +73,8 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
   Color get _primaryColor => AppColors.primary;
 
-  AppLocalizations get _l10n => AppLocalizations.of(context);
+  AppLocalizations get _l10n =>
+      AppLocalizations.of(context);
 
   // ==========================================================
   // INIT
@@ -202,9 +203,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 6),
-
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -214,10 +213,8 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 18),
 
-                // CAMERA
                 _EvidenceOption(
                   icon: Icons.camera_alt_outlined,
                   title: _l10n.takePhoto,
@@ -231,7 +228,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
                 const SizedBox(height: 10),
 
-                // GALLERY
                 _EvidenceOption(
                   icon: Icons.photo_library_outlined,
                   title: _l10n.chooseFromGallery,
@@ -244,7 +240,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
                 const SizedBox(height: 10),
 
-                // FILE
                 _EvidenceOption(
                   icon: Icons.insert_drive_file_outlined,
                   title: _l10n.chooseFile,
@@ -455,10 +450,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
     final normalizedName = name.trim();
 
-    // ========================================================
-    // DUPLICATE CHECK
-    // ========================================================
-
     final exists = _evidenceFiles.any(
           (item) {
         final oldName =
@@ -483,19 +474,11 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
       return;
     }
 
-    // ========================================================
-    // BASE64
-    // ========================================================
-
     String base64Data = '';
 
     if (bytes != null && bytes.isNotEmpty) {
       base64Data = base64Encode(bytes);
     }
-
-    // ========================================================
-    // MIME TYPE
-    // ========================================================
 
     final extension =
     normalizedName.contains('.')
@@ -544,10 +527,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
         break;
     }
 
-    // ========================================================
-    // FILE SIZE SAFETY
-    // ========================================================
-
+    // Keep Firestore document size safe.
     if (bytes != null &&
         bytes.length > 700 * 1024) {
       _showMessage(
@@ -556,10 +536,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
       );
       return;
     }
-
-    // ========================================================
-    // SAVE EVIDENCE
-    // ========================================================
 
     setState(() {
       _evidenceFiles.add({
@@ -604,17 +580,9 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
       return;
     }
 
-    // ========================================================
-    // FORM VALIDATION
-    // ========================================================
-
     if (!_formKey.currentState!.validate()) {
       return;
     }
-
-    // ========================================================
-    // CATEGORY VALIDATION
-    // ========================================================
 
     if (_selectedCategory == null) {
       _showMessage(
@@ -624,10 +592,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
       return;
     }
 
-    // ========================================================
-    // DATE VALIDATION
-    // ========================================================
-
     if (_incidentDate == null) {
       _showMessage(
         _l10n.pleaseSelectIncidentDate,
@@ -635,10 +599,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
       );
       return;
     }
-
-    // ========================================================
-    // FUTURE DATE CHECK
-    // ========================================================
 
     final now = DateTime.now();
 
@@ -662,10 +622,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
       return;
     }
 
-    // ========================================================
-    // OPEN REVIEW SCREEN
-    // ========================================================
-
     setState(() {
       _isSubmitting = true;
     });
@@ -675,76 +631,25 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
         context,
         MaterialPageRoute(
           builder: (_) => ComplaintReviewScreen(
-            // ------------------------------------------------
-            // TITLE
-            // ------------------------------------------------
-            title:
-            _titleController.text.trim(),
-
-            // ------------------------------------------------
-            // CATEGORY
-            // ComplaintReviewScreen expects String
-            // ------------------------------------------------
+            title: _titleController.text.trim(),
             category: _categoryLabel(
               _selectedCategory!,
             ),
-
-            // ------------------------------------------------
-            // USER NAME
-            // ------------------------------------------------
-            user:
-            _nameController.text.trim(),
-
-            // ------------------------------------------------
-            // USER EMAIL
-            // ------------------------------------------------
+            user: _nameController.text.trim(),
             userEmail:
             _emailController.text.trim(),
-
-            // ------------------------------------------------
-            // PHONE
-            // ------------------------------------------------
-            phone:
-            _phoneController.text.trim(),
-
-            // ------------------------------------------------
-            // DATE
-            // ------------------------------------------------
+            phone: _phoneController.text.trim(),
             date: _incidentDate!,
-
-            // ------------------------------------------------
-            // PLATFORM
-            // ------------------------------------------------
             platform:
             _platformController.text.trim(),
-
-            // ------------------------------------------------
-            // LOCATION
-            // ------------------------------------------------
             location:
             _locationController.text.trim(),
-
-            // ------------------------------------------------
-            // SUSPECT
-            // ------------------------------------------------
             suspect:
             _suspectController.text.trim(),
-
-            // ------------------------------------------------
-            // SUSPECT CONTACT
-            // ------------------------------------------------
             suspectContact:
             _suspectContactController.text.trim(),
-
-            // ------------------------------------------------
-            // DESCRIPTION
-            // ------------------------------------------------
             description:
             _descriptionController.text.trim(),
-
-            // ------------------------------------------------
-            // EVIDENCE
-            // ------------------------------------------------
             evidenceFiles:
             List<Map<String, dynamic>>.from(
               _evidenceFiles,
@@ -778,8 +683,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
       ..showSnackBar(
         SnackBar(
           content: Text(message),
-          behavior:
-          SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.floating,
           backgroundColor:
           isError ? Colors.red : null,
         ),
@@ -876,8 +780,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
             child: Form(
               key: _formKey,
               child: ListView(
-                padding:
-                const EdgeInsets.fromLTRB(
+                padding: const EdgeInsets.fromLTRB(
                   20,
                   20,
                   20,
@@ -935,8 +838,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              color:
-              Colors.white.withValues(
+              color: Colors.white.withValues(
                 alpha: 0.15,
               ),
               borderRadius:
@@ -996,16 +898,13 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
       _l10n.personalInformation,
       subtitle:
       _l10n.provideContactInformation,
-      icon:
-      Icons.person_outline,
+      icon: Icons.person_outline,
       children: [
-        // NAME
         _buildTextField(
           controller: _nameController,
           label: _l10n.fullName,
           hint: _l10n.enterFullName,
-          icon:
-          Icons.person_outline,
+          icon: Icons.person_outline,
           validator: (value) {
             if (value == null ||
                 value.trim().isEmpty) {
@@ -1018,13 +917,11 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
         const SizedBox(height: 14),
 
-        // EMAIL
         _buildTextField(
           controller: _emailController,
           label: _l10n.emailAddress,
           hint: _l10n.enterYourEmail,
-          icon:
-          Icons.email_outlined,
+          icon: Icons.email_outlined,
           keyboardType:
           TextInputType.emailAddress,
           validator: (value) {
@@ -1049,13 +946,11 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
         const SizedBox(height: 14),
 
-        // PHONE
         _buildTextField(
           controller: _phoneController,
           label: _l10n.phoneNumber,
           hint: _l10n.phoneNumber,
-          icon:
-          Icons.phone_outlined,
+          icon: Icons.phone_outlined,
           keyboardType:
           TextInputType.phone,
         ),
@@ -1076,7 +971,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
       icon:
       Icons.report_problem_outlined,
       children: [
-        // TITLE
         _buildTextField(
           controller: _titleController,
           label:
@@ -1096,12 +990,11 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
         const SizedBox(height: 14),
 
-        // CATEGORY
         DropdownButtonFormField<
             ComplaintCategory>(
-          value: _selectedCategory,
-          decoration:
-          InputDecoration(
+          initialValue:
+          _selectedCategory,
+          decoration: InputDecoration(
             labelText:
             _l10n.complaintCategory,
             hintText:
@@ -1144,14 +1037,11 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
         const SizedBox(height: 14),
 
-        // PLATFORM
         _buildTextField(
           controller:
           _platformController,
-          label:
-          _l10n.platform,
-          hint:
-          _l10n.platformHint,
+          label: _l10n.platform,
+          hint: _l10n.platformHint,
           icon:
           Icons.devices_outlined,
           validator: (value) {
@@ -1166,7 +1056,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
         const SizedBox(height: 14),
 
-        // DATE
         InkWell(
           onTap:
           _selectIncidentDate,
@@ -1179,14 +1068,12 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
               _l10n.incidentDate,
               prefixIcon:
               const Icon(
-                Icons
-                    .calendar_today_outlined,
+                Icons.calendar_today_outlined,
               ),
             ),
             child: Text(
               _incidentDate == null
-                  ? _l10n
-                  .selectIncidentDate
+                  ? _l10n.selectIncidentDate
                   : '${_incidentDate!.day.toString().padLeft(2, '0')}/'
                   '${_incidentDate!.month.toString().padLeft(2, '0')}/'
                   '${_incidentDate!.year}',
@@ -1196,35 +1083,29 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
         const SizedBox(height: 14),
 
-        // LOCATION
         _buildTextField(
           controller:
           _locationController,
-          label:
-          _l10n.location,
-          hint:
-          _l10n.cityArea,
+          label: _l10n.location,
+          hint: _l10n.cityArea,
           icon:
           Icons.location_on_outlined,
         ),
 
         const SizedBox(height: 14),
 
-        // SUSPECT
         _buildTextField(
           controller:
           _suspectController,
           label:
           _l10n.suspectAccount,
-          hint:
-          _l10n.suspectHint,
+          hint: _l10n.suspectHint,
           icon:
           Icons.person_search_outlined,
         ),
 
         const SizedBox(height: 14),
 
-        // SUSPECT CONTACT
         _buildTextField(
           controller:
           _suspectContactController,
@@ -1238,7 +1119,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
 
         const SizedBox(height: 14),
 
-        // DESCRIPTION
         _buildTextField(
           controller:
           _descriptionController,
@@ -1251,8 +1131,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
           maxLines: 6,
           validator: (value) {
             if (value == null ||
-                value.trim().length <
-                    20) {
+                value.trim().length < 20) {
               return _l10n
                   .describeIncidentClearly;
             }
@@ -1285,58 +1164,44 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
             width: double.infinity,
             padding:
             const EdgeInsets.all(22),
-            decoration:
-            BoxDecoration(
+            decoration: BoxDecoration(
               borderRadius:
-              BorderRadius.circular(
-                18,
-              ),
-              border:
-              Border.all(
+              BorderRadius.circular(18),
+              border: Border.all(
                 color:
-                _primaryColor
-                    .withValues(
+                _primaryColor.withValues(
                   alpha: 0.25,
                 ),
               ),
               color:
-              _primaryColor
-                  .withValues(
+              _primaryColor.withValues(
                 alpha: 0.04,
               ),
             ),
             child: Column(
               children: [
                 Icon(
-                  Icons
-                      .cloud_upload_outlined,
+                  Icons.cloud_upload_outlined,
                   size: 42,
-                  color:
-                  _primaryColor,
+                  color: _primaryColor,
                 ),
 
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
 
                 Text(
                   _l10n.addEvidence,
-                  style:
-                  const TextStyle(
+                  style: const TextStyle(
                     fontSize: 17,
                     fontWeight:
                     FontWeight.w700,
                   ),
                 ),
 
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5),
 
                 Text(
                   _l10n.cameraGalleryFile,
-                  style:
-                  const TextStyle(
+                  style: const TextStyle(
                     color: Colors.grey,
                   ),
                 ),
@@ -1345,7 +1210,6 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
           ),
         ),
 
-        // SELECTED EVIDENCE
         if (_evidenceFiles.isNotEmpty) ...[
           const SizedBox(height: 16),
 
@@ -1360,12 +1224,9 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
                 child:
                 _EvidencePreviewTile(
                   item:
-                  _evidenceFiles[
-                  index],
+                  _evidenceFiles[index],
                   onRemove: () =>
-                      _removeEvidence(
-                        index,
-                      ),
+                      _removeEvidence(index),
                 ),
               );
             },
@@ -1397,8 +1258,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen>
           ),
         )
             : const Icon(
-          Icons
-              .arrow_forward_rounded,
+          Icons.arrow_forward_rounded,
         ),
         label: Text(
           _l10n.reviewComplaint,
@@ -1428,8 +1288,7 @@ class _SectionCard
 
   @override
   Widget build(
-      BuildContext context,
-      ) {
+      BuildContext context) {
     return Card(
       elevation: 0,
       margin: EdgeInsets.zero,
@@ -1447,9 +1306,8 @@ class _SectionCard
                   height: 42,
                   decoration:
                   BoxDecoration(
-                    color: Theme.of(
-                      context,
-                    )
+                    color:
+                    Theme.of(context)
                         .colorScheme
                         .primary
                         .withValues(
@@ -1462,23 +1320,19 @@ class _SectionCard
                   ),
                   child: Icon(
                     icon,
-                    color: Theme.of(
-                      context,
-                    )
+                    color:
+                    Theme.of(context)
                         .colorScheme
                         .primary,
                   ),
                 ),
 
-                const SizedBox(
-                  width: 12,
-                ),
+                const SizedBox(width: 12),
 
                 Expanded(
                   child: Column(
                     crossAxisAlignment:
-                    CrossAxisAlignment
-                        .start,
+                    CrossAxisAlignment.start,
                     children: [
                       Text(
                         title,
@@ -1490,16 +1344,13 @@ class _SectionCard
                         ),
                       ),
 
-                      const SizedBox(
-                        height: 3,
-                      ),
+                      const SizedBox(height: 3),
 
                       Text(
                         subtitle,
                         style:
                         const TextStyle(
-                          color:
-                          Colors.grey,
+                          color: Colors.grey,
                         ),
                       ),
                     ],
@@ -1508,9 +1359,7 @@ class _SectionCard
               ],
             ),
 
-            const SizedBox(
-              height: 18,
-            ),
+            const SizedBox(height: 18),
 
             ...children,
           ],
@@ -1540,8 +1389,7 @@ class _EvidenceOption
 
   @override
   Widget build(
-      BuildContext context,
-      ) {
+      BuildContext context) {
     return ListTile(
       onTap: onTap,
       contentPadding:
@@ -1552,22 +1400,21 @@ class _EvidenceOption
       leading: Container(
         width: 46,
         height: 46,
-        decoration:
-        BoxDecoration(
-          color: Theme.of(context)
+        decoration: BoxDecoration(
+          color:
+          Theme.of(context)
               .colorScheme
               .primary
               .withValues(
             alpha: 0.10,
           ),
           borderRadius:
-          BorderRadius.circular(
-            14,
-          ),
+          BorderRadius.circular(14),
         ),
         child: Icon(
           icon,
-          color: Theme.of(context)
+          color:
+          Theme.of(context)
               .colorScheme
               .primary,
         ),
@@ -1580,12 +1427,10 @@ class _EvidenceOption
           FontWeight.w700,
         ),
       ),
-      subtitle:
-      Text(subtitle),
+      subtitle: Text(subtitle),
       trailing:
       const Icon(
-        Icons
-            .chevron_right_rounded,
+        Icons.chevron_right_rounded,
       ),
     );
   }
@@ -1618,8 +1463,7 @@ class _EvidencePreviewTile
 
   @override
   Widget build(
-      BuildContext context,
-      ) {
+      BuildContext context) {
     final name =
         item['name']?.toString() ??
             'Evidence';
@@ -1640,18 +1484,14 @@ class _EvidencePreviewTile
         borderRadius:
         BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.grey
-              .withValues(
+          color:
+          Colors.grey.withValues(
             alpha: 0.2,
           ),
         ),
       ),
       child: Row(
         children: [
-          // ==================================================
-          // PREVIEW
-          // ==================================================
-
           Container(
             width: 52,
             height: 52,
@@ -1659,44 +1499,31 @@ class _EvidencePreviewTile
             Clip.antiAlias,
             decoration:
             BoxDecoration(
-              color: Theme.of(
-                context,
-              )
+              color:
+              Theme.of(context)
                   .colorScheme
                   .primary
                   .withValues(
                 alpha: 0.08,
               ),
               borderRadius:
-              BorderRadius.circular(
-                12,
-              ),
+              BorderRadius.circular(12),
             ),
             child: image
                 ? Image.memory(
               bytes,
-              fit:
-              BoxFit.cover,
+              fit: BoxFit.cover,
             )
                 : Icon(
-              Icons
-                  .insert_drive_file,
+              Icons.insert_drive_file,
               color:
-              Theme.of(
-                context,
-              )
+              Theme.of(context)
                   .colorScheme
                   .primary,
             ),
           ),
 
-          const SizedBox(
-            width: 12,
-          ),
-
-          // ==================================================
-          // FILE NAME
-          // ==================================================
+          const SizedBox(width: 12),
 
           Expanded(
             child: Text(
@@ -1712,13 +1539,10 @@ class _EvidencePreviewTile
             ),
           ),
 
-          // ==================================================
-          // REMOVE
-          // ==================================================
-
           IconButton(
             onPressed: onRemove,
-            icon: const Icon(
+            icon:
+            const Icon(
               Icons.close_rounded,
             ),
             tooltip: 'Remove',

@@ -86,20 +86,93 @@ class _SplashScreenState
       return;
     }
 
-    final prefs =
-    await AuthService.instance.isLoggedIn();
+    try {
+      // ======================================================
+      // CHECK CURRENT FIREBASE USER
+      // ======================================================
 
-    if (!mounted) {
-      return;
-    }
+      final currentUser =
+          AuthService.instance.currentUser;
 
-    if (prefs) {
+      // ======================================================
+      // NO LOGGED-IN USER
+      // ======================================================
+
+      if (currentUser == null) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.onboarding,
+              (route) => false,
+        );
+
+        return;
+      }
+
+      // ======================================================
+      // GET USER ROLE FROM FIRESTORE
+      // ======================================================
+
+      final role =
+      await AuthService.instance.getUserRole();
+
+      if (!mounted) {
+        return;
+      }
+
+      // ======================================================
+      // ADMIN USER
+      // IMPORTANT:
+      // ADMIN GOES TO ADMIN SHELL
+      // ======================================================
+
+      if (role == 'admin') {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.adminShell,
+              (route) => false,
+        );
+
+        return;
+      }
+
+      // ======================================================
+      // NORMAL USER
+      // ======================================================
+
+      if (role == 'user') {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.main,
+              (route) => false,
+        );
+
+        return;
+      }
+
+      // ======================================================
+      // UNKNOWN / INVALID ROLE
+      // ======================================================
+
+      await AuthService.instance.logout();
+
+      if (!mounted) {
+        return;
+      }
+
       Navigator.pushNamedAndRemoveUntil(
         context,
-        AppRoutes.main,
+        AppRoutes.onboarding,
             (route) => false,
       );
-    } else {
+    } catch (e) {
+      debugPrint(
+        'SPLASH NAVIGATION ERROR: $e',
+      );
+
+      if (!mounted) {
+        return;
+      }
+
       Navigator.pushNamedAndRemoveUntil(
         context,
         AppRoutes.onboarding,
@@ -114,6 +187,10 @@ class _SplashScreenState
 
     super.dispose();
   }
+
+  // ==========================================================
+  // UI
+  // ==========================================================
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +208,10 @@ class _SplashScreenState
                 mainAxisAlignment:
                 MainAxisAlignment.center,
                 children: [
+                  // ==================================================
+                  // LOGO
+                  // ==================================================
+
                   Transform.scale(
                     scale: _scaleAnimation.value,
                     child: FadeTransition(
@@ -154,6 +235,10 @@ class _SplashScreenState
 
                   const SizedBox(height: 28),
 
+                  // ==================================================
+                  // APP NAME + DESCRIPTION
+                  // ==================================================
+
                   SlideTransition(
                     position: _slideAnimation,
                     child: FadeTransition(
@@ -176,7 +261,8 @@ class _SplashScreenState
                           Text(
                             'Cyber Crime Complaint &\n'
                                 'Awareness Management System',
-                            textAlign: TextAlign.center,
+                            textAlign:
+                            TextAlign.center,
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 13,

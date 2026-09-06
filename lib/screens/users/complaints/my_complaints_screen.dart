@@ -637,7 +637,7 @@ class _MyComplaintsScreenState extends State<MyComplaintsScreen>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => ComplaintDetailsScreen(
+        builder: (_) => ComplaintDetailScreen(
           complaint: complaint,
         ),
       ),
